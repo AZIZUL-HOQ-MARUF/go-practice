@@ -1,0 +1,25 @@
+# Claude Code local settings
+.claude/
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of go build
+/bin/
+/dist/
+
+# Go module download cache
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
