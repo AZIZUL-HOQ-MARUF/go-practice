@@ -181,10 +181,16 @@ outer:
 	// -------------------------------------------------------------------------
 	// EXERCISES
 	// -------------------------------------------------------------------------
-
+	fmt.Println("Exercises ----")
 	// EXERCISE 1:
 	// Write a for loop that prints the sum of integers 1 to 100.
 	// Expected: 5050
+	sum := 0
+	for i := 1; i<= 100; i++ {
+		sum += i
+	}
+	fmt.Println(sum)
+
 
 	// EXERCISE 2:
 	// Given this slice, use range to build a new slice containing only even numbers.
