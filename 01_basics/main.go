@@ -150,14 +150,81 @@ func main() {
 	// EXERCISE 2:
 	// Create a const block with iota representing card suits:
 	// Hearts=0, Diamonds=1, Clubs=2, Spades=3
+	const (
+		Hearts = iota
+		Diamonds
+		Clubs
+		Spades
+	)
 	// Print all four.
+	fmt.Println(Hearts, Diamonds, Clubs, Spades)
 
 	// EXERCISE 3:
 	// Declare an int variable `meters` = 100
+	meters := 100
+
 	// Convert it to float64, multiply by 3.28084 to get feet, print result
+	feet := float64(meters) * 3.28084
+	fmt.Printf("%f feet\n", feet)
 	// Expected: 328.084000 feet (or similar)
 
 	// EXERCISE 4:
 	// Using fmt.Printf, print your name, age, and city on one line using %s and %d
 	// Output should look like: "Name: Alice, Age: 30, City: Dhaka"
+
+	fmt.Printf("Name: %s, Age: %d, City: %s\n", "Azizul", 28, "Kraków")
+
+	// EXERCISE 5:
+	// Declare two variables `x` and `y` of type int using short declaration.
+	// Use multiple assignment to swap their values without using a temp variable.
+	// Print the swapped values.
+
+	k, j := 10, 20
+	k, j = j, k
+	fmt.Println(k, j)
+
+	// EXERCISE 6:
+	// Declare an integer variable `seconds` and assign it a value (e.g., 3661).
+	// Convert it to a formatted string "HH:MM:SS" (hours:minutes:seconds).
+	// Hint: You'll need to calculate hours, minutes, and seconds using integer
+	// division and modulo, then format them into a string. Use fmt.Sprintf.
+
+	seconds := 3661
+	hours := seconds / 3600
+	minutes := (seconds % 3600) / 60
+	seconds = seconds % 60
+
+	fmt.Printf("%02d:%02d:%02d\n", hours, minutes, seconds)
+
+	// EXERCISE 7:
+	// Declare four variables of types int, float64, bool, and string without
+	// assigning any initial values. Use fmt.Printf with %v and %T to print
+	var one int
+	var two float64
+	var three bool
+	var four string
+	fmt.Printf("%v %T\n", one, one)
+	fmt.Printf("%v %T\n", two, two)
+	fmt.Printf("%v %T\n", three, three)
+	fmt.Printf("%v %T\n", four, four)
+
+	// EXERCISE 8:
+	// Declare a rune variable `r` with the value 'G'.
+	// Print its integer value (code point), its character representation, and
+	// its type using fmt.Printf.
+	// Expected output: "Code point: 71, Character: G, Type: int32"
+	r := 'G'
+	fmt.Printf("Code point: %d, Character: %c, Type: %T\n", r , r, r)
+
+	// EXERCISE 9:
+	// Declare a constant `ConversionFactor` = 1.60934 (miles to kilometers).
+	// Declare an integer variable `miles` = 10.
+	// Calculate the distance in kilometers (kilometers = miles * ConversionFactor).
+	// Print the result formatted to 2 decimal places.
+	// Hint: You must perform explicit type conversion to multiply int and float64.
+	const ConversionFactor = 1.60934
+	miles := 10
+	kilometers := float32(miles) * ConversionFactor
+
+	fmt.Printf("%d miles in Kilometers are: %.2f\n", miles, kilometers)
 }
