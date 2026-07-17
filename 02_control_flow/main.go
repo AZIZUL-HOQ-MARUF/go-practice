@@ -191,22 +191,75 @@ outer:
 	}
 	fmt.Println(sum)
 
-
+	fmt.Println("EXERCISE 2:")
 	// EXERCISE 2:
 	// Given this slice, use range to build a new slice containing only even numbers.
 	// input := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	// expected: [2 4 6 8 10]
+	input := []int{1,2,3,4,5,6,7,8,9,10}
 
+	var evenNums []int
+
+	for _, v := range input {
+		if v%2 ==0 {
+			evenNums = append(evenNums,v)
+		}
+	}
+
+	fmt.Println(evenNums)
+
+	fmt.Println("EXERCISE 3:")
 	// EXERCISE 3:
 	// Write a switch statement that converts a numeric HTTP status code (200, 404, 500)
 	// to a human-readable message. Default: "Unknown status".
+	switch 200 {
+	case 200: fmt.Println("OK")
+	case 404: fmt.Println("Not Found");
+	case 500: fmt.Println("Internal Server Error")
+	default: fmt.Println("Unknown status");
+	}
 
 	// EXERCISE 4:
 	// FizzBuzz in Go: for 1..30, print "Fizz" if divisible by 3,
 	// "Buzz" if by 5, "FizzBuzz" if by both, else the number.
 	// Use for + if/else (then try with switch {})
+	fmt.Println("EXERCISE 4:")
+
+	for i := 1; i <31; i++ {
+		if i%3 ==0 && i%5 == 0 {
+			fmt.Println("FizzBuzz")
+		} else if i%3 == 0 {
+			fmt.Println("Fizz")
+		} else if i%5 == 0 {
+			fmt.Println("Buzz")
+		} else {
+			fmt.Println(i)
+		}
+	}
+
+	for i := 1; i <31; i++ {
+		switch {
+		case i%3 == 0 && i%5 == 0: fmt.Println("FizzBuzz")
+		case i%3 == 0: fmt.Println("Fizz")
+		case i%5 == 0: fmt.Println("Buzz")
+		default: fmt.Println(i)
+		}		
+	}
+
+	fmt.Println("EXERCISE 5:")
+
 
 	// EXERCISE 5:
 	// Using a labeled break, find and print the first pair (i, j) where
 	// i*j > 20 from a 5x5 grid (i=1..5, j=1..5).
+	pairFinder:
+	for i := 1; i<6; i++ {
+		for j:= 1; j<6; j++ {
+			if i*j > 20 {
+				fmt.Println(i*j)
+				break pairFinder
+			}
+		}
+		fmt.Printf("before break i = %d\n", i)
+	}
 }
