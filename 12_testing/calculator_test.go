@@ -348,3 +348,28 @@ func TestParallelExample(t *testing.T) {
 		})
 	}
 }
+
+// -------------------------------------------------------------------------
+// EXERCISES — implement the stubs below
+// -------------------------------------------------------------------------
+
+// EXERCISE 1 (Table-driven test):
+// Write TestMultiply using table-driven tests with t.Run.
+// Test cases should cover: positive numbers, negatives, zero, large numbers.
+// Multiply is already implemented in calculator.go.
+// func TestMultiply(t *testing.T) { ... }
+
+// EXERCISE 2 (Benchmark with b.Run):
+// Write BenchmarkIsPalindrome that benchmarks IsPalindrome with:
+//   a) a short word ("racecar")
+//   b) a long sentence ("A man a plan a canal Panama" repeated several times)
+// Use b.Run to name sub-benchmarks.
+// Run with: go test -bench=BenchmarkIsPalindrome -benchmem ./12_testing/...
+// func BenchmarkIsPalindrome(b *testing.B) { ... }
+
+// EXERCISE 3 (Example function):
+// Write ExampleIsPalindrome() with at least 3 cases and an // Output: comment.
+// The output comment must exactly match what fmt.Println produces — go test
+// verifies this automatically.
+// Verify it passes with: go test -v ./12_testing/...
+// func ExampleIsPalindrome() { ... }

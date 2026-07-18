@@ -464,4 +464,30 @@ func main() {
 	// - Reduce phase: combine the partial sums
 	// Input: [1..100], Map: square each, Reduce: sum
 	// Expected: 338350
+
+	// EXERCISE 6 (sync.Once — singleton):
+	// Implement a Config struct that should only be loaded once (simulating
+	// reading from a file). Use sync.Once to ensure loadConfig() is only called
+	// once even when called from 10 concurrent goroutines.
+	// Print "loading config..." only once, then print the config from all goroutines.
+
+	// EXERCISE 7 (sync.RWMutex — read-heavy cache):
+	// Implement a thread-safe in-memory key/value cache:
+	//   type Cache struct { mu sync.RWMutex; data map[string]string }
+	//   func (c *Cache) Get(key string) (string, bool)
+	//   func (c *Cache) Set(key, value string)
+	// Launch 10 reader goroutines and 2 writer goroutines simultaneously.
+	// Verify no data races with: go run -race 09_goroutines/main.go
+
+	// EXERCISE 8 (Race condition — detect and fix):
+	// The following has a data race — identify and fix it with atomic:
+	//   counter := 0
+	//   var wg sync.WaitGroup
+	//   for i := 0; i < 1000; i++ {
+	//       wg.Add(1)
+	//       go func() { defer wg.Done(); counter++ }()
+	//   }
+	//   wg.Wait()
+	//   fmt.Println(counter)  // often prints less than 1000
+	// Run with -race to confirm the race. Fix with atomic.AddInt64 and verify.
 }

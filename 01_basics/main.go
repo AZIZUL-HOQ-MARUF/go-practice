@@ -214,7 +214,7 @@ func main() {
 	// its type using fmt.Printf.
 	// Expected output: "Code point: 71, Character: G, Type: int32"
 	r := 'G'
-	fmt.Printf("Code point: %d, Character: %c, Type: %T\n", r , r, r)
+	fmt.Printf("Code point: %d, Character: %c, Type: %T\n", r, r, r)
 
 	// EXERCISE 9:
 	// Declare a constant `ConversionFactor` = 1.60934 (miles to kilometers).
@@ -227,4 +227,21 @@ func main() {
 	kilometers := float32(miles) * ConversionFactor
 
 	fmt.Printf("%d miles in Kilometers are: %.2f\n", miles, kilometers)
+
+	// EXERCISE 10:
+	// Declare iota constants for file permissions using bit flags:
+	//   Read  = 1 << iota  (1)
+	//   Write              (2)
+	//   Execute            (4)
+	// Create a variable `perms` that combines Read + Write using bitwise OR.
+	// Check if Write permission is set using bitwise AND. Print the result.
+
+	// EXERCISE 11:
+	// Demonstrate the string(int) gotcha:
+	// Declare n := 65 (type int).
+	// a) Print string(rune(n))      — what does this produce?
+	// b) Print strconv.Itoa(n)      — what does this produce?
+	// c) Print fmt.Sprintf("%d", n) — and this?
+	// Explain in a comment why string(65) does NOT give "65".
+
 }

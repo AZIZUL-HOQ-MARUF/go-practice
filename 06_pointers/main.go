@@ -257,6 +257,24 @@ func main() {
 	// Implement a simple doubly-linked list:
 	// type DNode struct { Val int; Prev, Next *DNode }
 	// Methods: PushFront, PushBack, Delete, Print (forward), Print (backward)
+
+	// EXERCISE 6 (Loop variable capture gotcha):
+	// The following code has a bug — all funcs print the same value:
+	//   funcs := make([]func(), 5)
+	//   for i := 0; i < 5; i++ {
+	//       funcs[i] = func() { fmt.Println(i) }
+	//   }
+	//   for _, f := range funcs { f() }
+	// a) Run it and observe the output.
+	// b) Fix it by capturing i in a new variable inside the loop.
+	// c) Explain in a comment WHY the bug happens (what does the closure close over?).
+
+	// EXERCISE 7 (Nil pointer guard):
+	// Write a function safeLen(s *[]int) int that returns 0 if s is nil,
+	// otherwise returns len(*s).
+	// Write safeGet(s *[]int, index int) (int, bool) that returns the element
+	// and true if in bounds, or 0 and false if s is nil or index is out of bounds.
+	// Test with both nil and non-nil pointers.
 }
 
 func doubleElements(s []int) {

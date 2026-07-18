@@ -259,4 +259,29 @@ func main() {
 	// EXERCISE 5 (Challenge):
 	// Write a function `memoize(f func(int) int) func(int) int`
 	// that wraps f and caches results. Prove it works with a slow fibonacci.
+
+	// EXERCISE 6:
+	// Write a function `incrementOnReturn(x int) (result int)` that uses a deferred
+	// anonymous function to increment the named return value `result` by 1 after it
+	// has been set.
+	// If you set `result = x * 2` in the main body, check what the function returns
+	// when called with 5 (should return 11). This tests your understanding of how
+	// defer interacts with named return values.
+
+	// EXERCISE 7:
+	// Write a function `compose(f, g func(int) int) func(int) int` that returns a
+	// closure representing the composition f(g(x)).
+	// Test it with two functions: double (x * 2) and addThree (x + 3), and print
+	// the result of compose(double, addThree)(5). Expected output: 16.
+
+	// EXERCISE 8:
+	// Write a function `filter(nums []int, predicate func(int) bool) []int` that
+	// returns a new slice containing only the elements that satisfy the predicate.
+	// Test it by filtering a slice of integers to only keep even numbers.
+
+	// EXERCISE 9:
+	// Write a recursive function `power(base, exp int) int` that computes base^exp.
+	// Then write `flatten(nested [][]int) []int` that flattens a 2D slice into 1D.
+	// Test: power(2, 10) → 1024, flatten([][]int{{1,2},{3,4},{5}}) → [1 2 3 4 5]
+
 }

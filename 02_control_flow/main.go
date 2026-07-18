@@ -186,7 +186,7 @@ outer:
 	// Write a for loop that prints the sum of integers 1 to 100.
 	// Expected: 5050
 	sum := 0
-	for i := 1; i<= 100; i++ {
+	for i := 1; i <= 100; i++ {
 		sum += i
 	}
 	fmt.Println(sum)
@@ -196,13 +196,13 @@ outer:
 	// Given this slice, use range to build a new slice containing only even numbers.
 	// input := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	// expected: [2 4 6 8 10]
-	input := []int{1,2,3,4,5,6,7,8,9,10}
+	input := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 	var evenNums []int
 
 	for _, v := range input {
-		if v%2 ==0 {
-			evenNums = append(evenNums,v)
+		if v%2 == 0 {
+			evenNums = append(evenNums, v)
 		}
 	}
 
@@ -213,10 +213,14 @@ outer:
 	// Write a switch statement that converts a numeric HTTP status code (200, 404, 500)
 	// to a human-readable message. Default: "Unknown status".
 	switch 200 {
-	case 200: fmt.Println("OK")
-	case 404: fmt.Println("Not Found");
-	case 500: fmt.Println("Internal Server Error")
-	default: fmt.Println("Unknown status");
+	case 200:
+		fmt.Println("OK")
+	case 404:
+		fmt.Println("Not Found")
+	case 500:
+		fmt.Println("Internal Server Error")
+	default:
+		fmt.Println("Unknown status")
 	}
 
 	// EXERCISE 4:
@@ -225,8 +229,8 @@ outer:
 	// Use for + if/else (then try with switch {})
 	fmt.Println("EXERCISE 4:")
 
-	for i := 1; i <31; i++ {
-		if i%3 ==0 && i%5 == 0 {
+	for i := 1; i < 31; i++ {
+		if i%3 == 0 && i%5 == 0 {
 			fmt.Println("FizzBuzz")
 		} else if i%3 == 0 {
 			fmt.Println("Fizz")
@@ -237,29 +241,66 @@ outer:
 		}
 	}
 
-	for i := 1; i <31; i++ {
+	for i := 1; i < 31; i++ {
 		switch {
-		case i%3 == 0 && i%5 == 0: fmt.Println("FizzBuzz")
-		case i%3 == 0: fmt.Println("Fizz")
-		case i%5 == 0: fmt.Println("Buzz")
-		default: fmt.Println(i)
-		}		
+		case i%3 == 0 && i%5 == 0:
+			fmt.Println("FizzBuzz")
+		case i%3 == 0:
+			fmt.Println("Fizz")
+		case i%5 == 0:
+			fmt.Println("Buzz")
+		default:
+			fmt.Println(i)
+		}
 	}
 
 	fmt.Println("EXERCISE 5:")
 
-
 	// EXERCISE 5:
 	// Using a labeled break, find and print the first pair (i, j) where
 	// i*j > 20 from a 5x5 grid (i=1..5, j=1..5).
-	pairFinder:
-	for i := 1; i<6; i++ {
-		for j:= 1; j<6; j++ {
+pairFinder:
+	for i := 1; i < 6; i++ {
+		for j := 1; j < 6; j++ {
 			if i*j > 20 {
-				fmt.Println(i*j)
+				fmt.Println(i * j)
 				break pairFinder
 			}
 		}
 		fmt.Printf("before break i = %d\n", i)
 	}
+
+	// EXERCISE 6:
+	// Use an `if` with an init statement to open a file and handle the error:
+	//   if f, err := os.Open("nonexistent.txt"); err != nil {
+	//       fmt.Println("error:", err)
+	//   } else {
+	//       defer f.Close()
+	//       fmt.Println("opened:", f.Name())
+	//   }
+	// Notice `f` and `err` are scoped to the if/else block only.
+	// (Import "os" for this exercise.)
+
+	// EXERCISE 7:
+	// Write a switch that maps a rune to its keyboard category.
+	// Cases: 'a'-'z' and 'A'-'Z' → "letter", '0'-'9' → "digit",
+	// ' ', '\t', '\n' → "whitespace", '+','-','*','/' → "operator", default → "other"
+	// Hint: a single case can list multiple values: case 'a', 'e', 'i', 'o', 'u':
+	// Test with at least 5 different inputs.
+
+	// EXERCISE 8:
+	// Write a type switch function describe(v any) string that returns:
+	//   int    → "integer: <value>"
+	//   string → "string of length <n>"
+	//   bool   → "boolean: <value>"
+	//   []int  → "int slice with <n> elements"
+	//   nil    → "nil"
+	//   default → "unknown type"
+	// Call it with 5 different values and print the results.
+
+	// EXERCISE 9:
+	// Use `range` over the string "Hello, 世界" and print each character's
+	// byte index and rune value using Printf("%d: %c\n", index, r).
+	// Then separately loop over it as []byte and show the byte values.
+	// Observe: how many iterations does range-over-string give vs range-over-bytes?
 }
