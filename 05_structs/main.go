@@ -286,4 +286,28 @@ func main() {
 	// type Node struct { Val int; Next *Node }
 	// Write functions: NewList(vals ...int) *Node, String(*Node) string,
 	//                  Reverse(*Node) *Node
+
+	// EXERCISE 6 (Stringer):
+	// Define a `Color` struct with R, G, B uint8 fields.
+	// Implement String() string so fmt.Println(c) prints "rgb(R, G, B)".
+	// Also implement a Hex() string method that returns "#RRGGBB" (hex format).
+	// Test: Color{255, 128, 0} → "rgb(255, 128, 0)" and "#FF8000"
+
+	// EXERCISE 7 (Value copy semantics):
+	// Define a Coord struct {X, Y int}.
+	// a) Assign one Coord to another and modify the copy — show the original is unchanged.
+	// b) Now do the same with *Coord — show that modifying through a pointer DOES change the original.
+	// c) Write a function scaleCoord(p Coord, factor int) Coord (value receiver version).
+	//    Write scaleCoordInPlace(p *Coord, factor int) (pointer receiver version).
+	//    Call both and compare results.
+
+	// EXERCISE 8 (Struct tags):
+	// Define a Product struct with fields:
+	//   ID    int    (json:"id")
+	//   Name  string (json:"name")
+	//   Price float64 (json:"price,omitempty")
+	//   secret string  (unexported — never appears in JSON)
+	// Marshal a Product to JSON (import "encoding/json").
+	// Then unmarshal the JSON back and verify secret is empty string.
+	// Print the JSON output.
 }

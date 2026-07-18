@@ -326,6 +326,24 @@ func main() {
 	// type Result[T any] struct { ... }
 	// Methods: Ok(val T) Result[T], Err(err error) Result[T],
 	//          IsOk() bool, Unwrap() T, UnwrapOr(default T) T
+
+	// EXERCISE 6 (errors.Is through wrapped chain):
+	// Define a sentinel error: var ErrRecordNotFound = errors.New("record not found")
+	// Write a function findRecord(id int) error that:
+	//   - returns fmt.Errorf("findRecord: %w", fmt.Errorf("db layer: %w", ErrRecordNotFound))
+	//     when id <= 0
+	//   - returns nil otherwise
+	// Call findRecord(-1) and use errors.Is to check if the root cause is ErrRecordNotFound.
+	// Also call errors.Unwrap repeatedly to manually walk the chain and print each layer.
+
+	// EXERCISE 7 (errors.Join):
+	// Write a validateForm(name, email string, age int) error function that
+	// collects ALL validation errors (don't stop at first), then returns them joined:
+	//   - name must not be empty
+	//   - email must contain "@"
+	//   - age must be between 0 and 150
+	// Use errors.Join to combine multiple errors into one.
+	// Print the combined error message for invalid inputs.
 }
 
 // Helper functions for examples

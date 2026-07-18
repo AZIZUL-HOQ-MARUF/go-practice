@@ -193,5 +193,21 @@ func main() {
 	// Calculate the distance in kilometers (kilometers = miles * ConversionFactor).
 	// Print the result formatted to 2 decimal places.
 	// Hint: You must perform explicit type conversion to multiply int and float64.
-	
+
+	// EXERCISE 10:
+	// Declare iota constants for file permissions using bit flags:
+	//   Read  = 1 << iota  (1)
+	//   Write              (2)
+	//   Execute            (4)
+	// Create a variable `perms` that combines Read + Write using bitwise OR.
+	// Check if Write permission is set using bitwise AND. Print the result.
+
+	// EXERCISE 11:
+	// Demonstrate the string(int) gotcha:
+	// Declare n := 65 (type int).
+	// a) Print string(rune(n))      — what does this produce?
+	// b) Print strconv.Itoa(n)      — what does this produce?
+	// c) Print fmt.Sprintf("%d", n) — and this?
+	// Explain in a comment why string(65) does NOT give "65".
+
 }

@@ -328,4 +328,24 @@ func main() {
 	// Implement: UpperCase, Reverse, PigLatin transformers.
 	// Write Pipeline(input string, transformers ...Transformer) string
 	// that applies them in sequence.
+
+	// EXERCISE 6 (Interface composition):
+	// Define three small interfaces:
+	//   Reader interface { Read() string }
+	//   Writer interface { Write(s string) }
+	//   ReadWriter interface { Reader; Writer }  // composition
+	// Implement a Buffer struct that satisfies ReadWriter.
+	// Write a function copyData(src Reader, dst Writer) that reads from src and writes to dst.
+
+	// EXERCISE 7 (Nil interface gotcha):
+	// The following function has a subtle bug:
+	//   func getError(fail bool) error {
+	//       var p *MyError = nil
+	//       if fail { p = &MyError{"something went wrong"} }
+	//       return p   // BUG: returns typed nil, not untyped nil
+	//   }
+	// a) Call getError(false) and check if err == nil. What do you observe?
+	// b) Fix the function so it correctly returns nil when fail is false.
+	// c) Explain in a comment: what is the difference between a typed nil
+	//    and an untyped nil when stored in an interface value?
 }

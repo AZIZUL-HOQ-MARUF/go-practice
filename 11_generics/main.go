@@ -385,4 +385,20 @@ func main() {
 	// otherwise returns v. (Pattern used in initialization code)
 	// val := Must(strconv.Atoi("42")) // returns 42
 	// val2 := Must(strconv.Atoi("x")) // panics
+
+	// EXERCISE 6 (Custom constraint with ~):
+	// Define a constraint Stringable that matches any type whose underlying type
+	// is string (using ~string). Write a generic function Shout[T Stringable](v T) T
+	// that appends "!!!" to v and returns it.
+	// Define: type Greeting string
+	// Verify Shout works with both plain string and Greeting.
+
+	// EXERCISE 7 (Multiple type parameters):
+	// Write a generic function ZipWith[A, B, C any](
+	//   as []A, bs []B, fn func(A, B) C,
+	// ) []C
+	// that pairs elements from two slices and applies fn to each pair.
+	// Test: ZipWith([]int{1,2,3}, []string{"a","b","c"}, func(n int, s string) string {
+	//   return fmt.Sprintf("%d:%s", n, s)
+	// }) → ["1:a" "2:b" "3:c"]
 }

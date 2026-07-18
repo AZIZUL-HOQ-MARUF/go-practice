@@ -203,4 +203,38 @@ outer:
 	// EXERCISE 5:
 	// Using a labeled break, find and print the first pair (i, j) where
 	// i*j > 20 from a 5x5 grid (i=1..5, j=1..5).
+
+	// EXERCISE 6:
+	// Use an `if` with an init statement to open a file and handle the error:
+	//   if f, err := os.Open("nonexistent.txt"); err != nil {
+	//       fmt.Println("error:", err)
+	//   } else {
+	//       defer f.Close()
+	//       fmt.Println("opened:", f.Name())
+	//   }
+	// Notice `f` and `err` are scoped to the if/else block only.
+	// (Import "os" for this exercise.)
+
+	// EXERCISE 7:
+	// Write a switch that maps a rune to its keyboard category.
+	// Cases: 'a'-'z' and 'A'-'Z' → "letter", '0'-'9' → "digit",
+	// ' ', '\t', '\n' → "whitespace", '+','-','*','/' → "operator", default → "other"
+	// Hint: a single case can list multiple values: case 'a', 'e', 'i', 'o', 'u':
+	// Test with at least 5 different inputs.
+
+	// EXERCISE 8:
+	// Write a type switch function describe(v any) string that returns:
+	//   int    → "integer: <value>"
+	//   string → "string of length <n>"
+	//   bool   → "boolean: <value>"
+	//   []int  → "int slice with <n> elements"
+	//   nil    → "nil"
+	//   default → "unknown type"
+	// Call it with 5 different values and print the results.
+
+	// EXERCISE 9:
+	// Use `range` over the string "Hello, 世界" and print each character's
+	// byte index and rune value using Printf("%d: %c\n", index, r).
+	// Then separately loop over it as []byte and show the byte values.
+	// Observe: how many iterations does range-over-string give vs range-over-bytes?
 }

@@ -460,6 +460,21 @@ func main() {
 	// EXERCISE 6 (os/bufio):
 	// Read a file line by line, count lines/words/bytes (like wc command).
 	// func wcFile(path string) (lines, words, bytes int, err error)
+
+	// EXERCISE 7 (time.NewTicker):
+	// Write a function runWithTicker(ctx context.Context, interval time.Duration, fn func())
+	// that calls fn every interval until ctx is cancelled.
+	// Test it: create a context with 350ms timeout, tick every 100ms.
+	// Verify fn is called ~3 times before the context cancels.
+	// (Import "context" for this exercise.)
+
+	// EXERCISE 8 (slog — structured logging):
+	// Create a JSON slog logger. Write a function processOrder(log *slog.Logger, orderID int, userID string)
+	// that logs:
+	//   - "processing order" at Info level with orderID and userID as fields
+	//   - "order complete" at Info level with a duration field (use time.Since)
+	//   - if orderID < 0: "invalid order" at Warn level with an error field
+	// Call it with valid and invalid inputs and observe the JSON output.
 }
 
 // Compile check: ensure imports are used

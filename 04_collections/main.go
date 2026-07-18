@@ -268,6 +268,28 @@ func main() {
 	// Given []string{"apple","banana","apple","cherry","banana","apple"}
 	// Return a map of word → count, then find the most frequent word.
 
+	// EXERCISE 6 (Slice internals):
+	// Demonstrate the shared backing array gotcha:
+	//   a := []int{1, 2, 3, 4, 5}
+	//   b := a[1:3]   // b shares memory with a
+	//   b[0] = 99
+	// Print a and b after the modification. Does a change?
+	// Then fix it by using copy() to make b independent, and repeat.
+
+	// EXERCISE 7 (Set pattern):
+	// Implement a string set using map[string]struct{}.
+	// Functions: Add(set, val), Remove(set, val), Contains(set, val) bool, Union(a, b) set
+	// Use it to find the unique words in:
+	//   s1 := "the cat sat on the mat"
+	//   s2 := "the dog sat on the log"
+	// Print the union of both word sets.
+
+	// EXERCISE 8 (make + capacity):
+	// Write a function buildSlice(n int) []int that uses make([]int, 0, n) to
+	// pre-allocate capacity, then appends n*n, (n-1)*(n-1), ..., 1*1 to it.
+	// Print the resulting slice, its length, and its capacity.
+	// Explain in a comment why pre-allocating capacity is faster for large n.
+
 	_ = matrix // suppress unused warning
 	_ = b
 	_ = a
