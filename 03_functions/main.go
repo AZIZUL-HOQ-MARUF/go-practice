@@ -177,9 +177,9 @@ func main() {
 	fmt.Printf("area=%.2f circumference=%.2f\n", area, circ)
 
 	// Variadic
-	fmt.Println(sum(1, 2, 3))          // 6
-	fmt.Println(sum(1, 2, 3, 4, 5))    // 15
-	fmt.Println(sum())                  // 0
+	fmt.Println(sum(1, 2, 3))       // 6
+	fmt.Println(sum(1, 2, 3, 4, 5)) // 15
+	fmt.Println(sum())              // 0
 
 	// Spread a slice into variadic — use ... suffix (like JS spread)
 	nums := []int{10, 20, 30}
@@ -218,15 +218,32 @@ func main() {
 	// EXERCISES
 	// -------------------------------------------------------------------------
 
+	fmt.Println("Exercises ----")
+
 	// EXERCISE 1:
 	// Write a function `swap(a, b int) (int, int)` that returns the two values swapped.
 	// Call it and print both results.
+	swap := func(a, b int) (int, int) {
+		return b, a
+	}
+	fmt.Println(swap(5, 10))
 
 	// EXERCISE 2:
 	// Write a variadic function `joinStrings(sep string, parts ...string) string`
 	// that joins strings with a separator.
 	// joinStrings(", ", "Go", "is", "fun") → "Go, is, fun"
 	// Hint: use a for loop with range, build result string manually (or use strings.Join)
+	joinStrings := func(sep string, parts ...string) string {
+		result := ""
+		for i, v := range parts {
+			result += v
+			if i != len(parts)-1 {
+				result += sep
+			}
+		}
+		return result
+	}
+	fmt.Println(joinStrings(", ", "Go", "is", "fun"))
 
 	// EXERCISE 3:
 	// Write a function `makeAdder(n int) func(int) int` that returns a closure.
