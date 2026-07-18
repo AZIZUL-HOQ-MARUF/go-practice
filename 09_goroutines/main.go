@@ -9,6 +9,52 @@
 //
 // Go can run millions of goroutines. JS has one thread + event loop.
 // Go's concurrency is ACTUAL parallelism (multiple CPU cores).
+//
+// =========================================================================
+// THEORY: Concurrency concepts every Go dev must know
+// =========================================================================
+//
+// Concurrency vs Parallelism
+//   Concurrency  — structuring a program to handle multiple tasks at once
+//                  (doesn't require multiple CPUs; about DESIGN)
+//   Parallelism  — executing multiple tasks simultaneously on multiple CPUs
+//                  (about EXECUTION)
+//   Rob Pike: "Concurrency is about DEALING with lots of things at once.
+//              Parallelism is about DOING lots of things at once."
+//
+// CSP — Communicating Sequential Processes (Tony Hoare, 1978)
+//   Go's concurrency model. Instead of sharing memory, independent processes
+//   communicate by passing messages through channels.
+//   This is why channels exist — they ARE the communication mechanism.
+//
+// Data Race
+//   Two goroutines access the same memory concurrently and at least one writes,
+//   with no synchronization. Result is undefined/unpredictable.
+//   Detect with: go run -race 09_goroutines/main.go
+//
+// Race Condition
+//   Program correctness depends on timing/ordering of goroutines.
+//   Example: read-check-write without a lock — another goroutine can
+//   modify the value between your read and write.
+//
+// Deadlock
+//   All goroutines are blocked waiting on each other — program hangs forever.
+//   Requires all 4 Coffman conditions simultaneously:
+//     1. Mutual exclusion  — only one goroutine holds a resource at a time
+//     2. Hold and wait     — goroutine holds resource while waiting for another
+//     3. No preemption     — resources can't be forcibly taken away
+//     4. Circular wait     — G1 waits on G2, G2 waits on G1
+//   Go detects this at runtime: "all goroutines are asleep - deadlock!"
+//
+// Livelock
+//   Goroutines are NOT blocked — they keep running and responding to each
+//   other — but no progress is made. Like two people stepping aside for
+//   each other in a hallway, indefinitely.
+//
+// Starvation
+//   A goroutine can never acquire the resources it needs because other
+//   goroutines (or a poorly tuned scheduler) always win first.
+// =========================================================================
 
 package main
 
