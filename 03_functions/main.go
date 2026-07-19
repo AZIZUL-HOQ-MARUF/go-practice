@@ -10,6 +10,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"time"
 )
 
 // -------------------------------------------------------------------------
@@ -228,6 +229,7 @@ func main() {
 	}
 	fmt.Println(swap(5, 10))
 
+	fmt.Println("Exercises ---- 2")
 	// EXERCISE 2:
 	// Write a variadic function `joinStrings(sep string, parts ...string) string`
 	// that joins strings with a separator.
@@ -245,20 +247,87 @@ func main() {
 	}
 	fmt.Println(joinStrings(", ", "Go", "is", "fun"))
 
+	fmt.Println("Exercises ---- 3")
+
 	// EXERCISE 3:
 	// Write a function `makeAdder(n int) func(int) int` that returns a closure.
 	// add5 := makeAdder(5)
 	// fmt.Println(add5(3))  // 8
 	// fmt.Println(add5(10)) // 15
 
+	makeAdder := func(n int) func(int) int {
+		return func(i int) int {
+			return n + i
+		}
+	}
+
+	add5 := makeAdder(5)
+	fmt.Println(add5(3))
+	fmt.Println(add5(10))
+
+	fmt.Println("Exercises ---- 4")
 	// EXERCISE 4:
 	// Write a function that uses defer to print "Done!" at the end regardless
 	// of where in the function you return.
 	// Simulate an early return condition and prove defer still fires.
 
+	deferFn := func(x int) {
+		defer fmt.Println("Done!")
+		if x < 0 {
+			fmt.Printf("Returning early: X cannot be negative : %d\n", x)
+			return
+		}
+
+		fmt.Printf("X is a positive number : %d\n", x)
+	}
+	deferFn(-3)
+	deferFn(10)
+
+	fmt.Println("Exercises ---- 5")
 	// EXERCISE 5 (Challenge):
 	// Write a function `memoize(f func(int) int) func(int) int`
 	// that wraps f and caches results. Prove it works with a slow fibonacci.
+	memoize := func(f func(int) int) func(int) int {
+		cache := make(map[int]int)
+
+		return func(n int) int {
+			if val, exists := cache[n]; exists {
+				return val
+			}
+
+			result := f(n)
+			cache[n] = result
+
+			return result
+		}
+	}
+
+	var slowFib func(int) int
+
+	slowFib = func(n int) int {
+		if n <= 1 {
+			return n
+		}
+		return slowFib(n-1) + slowFib(n-2)
+	}
+
+	// memoize, init the cache
+	cachedFib := memoize(slowFib)
+
+	// --- TEST 1: First Run (Cold Cache) ---
+	fmt.Println("Calculating Fib(42) for the first time...")
+	start := time.Now()
+	res1 := cachedFib(42)
+	duration1 := time.Since(start)
+	fmt.Printf("Result: %d (Took: %v)\n\n", res1, duration1)
+
+	// --- TEST 2: Second Run (Hot Cache) ---
+	fmt.Println("Calculating Fib(42) a second time...")
+	start = time.Now()
+	res2 := cachedFib(42)
+	duration2 := time.Since(start)
+	fmt.Printf("Result: %d (Took: %v)\n\n", res2, duration2)
+	fmt.Printf("Speedup factor: %x nanoseconds vs %x nanoseconds! \n", duration1.Nanoseconds(), duration2.Nanoseconds())
 
 	// EXERCISE 6:
 	// Write a function `incrementOnReturn(x int) (result int)` that uses a deferred
