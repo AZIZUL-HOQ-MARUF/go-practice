@@ -329,6 +329,8 @@ func main() {
 	fmt.Printf("Result: %d (Took: %v)\n\n", res2, duration2)
 	fmt.Printf("Speedup factor: %x nanoseconds vs %x nanoseconds! \n", duration1.Nanoseconds(), duration2.Nanoseconds())
 
+
+	fmt.Println("Exercises ---- 6")
 	// EXERCISE 6:
 	// Write a function `incrementOnReturn(x int) (result int)` that uses a deferred
 	// anonymous function to increment the named return value `result` by 1 after it
@@ -336,21 +338,84 @@ func main() {
 	// If you set `result = x * 2` in the main body, check what the function returns
 	// when called with 5 (should return 11). This tests your understanding of how
 	// defer interacts with named return values.
+	incrementOnReturn := func(x int) (result int) {
+		defer func() {
+			result++
+		}() // defer will be executed right before the function exits
 
+		result = x * 2
+
+		// Return statement executes, but the function isn't done yet
+		return // named return
+	}
+
+	fmt.Printf("Expected Output: 11\n")
+	fmt.Println(incrementOnReturn(5))
+
+	fmt.Println("Exercises ---- 7")
 	// EXERCISE 7:
 	// Write a function `compose(f, g func(int) int) func(int) int` that returns a
 	// closure representing the composition f(g(x)).
 	// Test it with two functions: double (x * 2) and addThree (x + 3), and print
 	// the result of compose(double, addThree)(5). Expected output: 16.
+	compose := func(f, g func(int) int) func(int) int {
+		return func(x int) int {
+			return f(g(x))
+		}
+	}
 
+	doubles := func(e int) int { return e * 2 }
+	addThree := func(k int) int { return k + 3}
+	// Expected output: 16.
+	fmt.Println(compose(doubles, addThree)(5))
+
+	fmt.Println("Exercises ---- 8")
 	// EXERCISE 8:
 	// Write a function `filter(nums []int, predicate func(int) bool) []int` that
 	// returns a new slice containing only the elements that satisfy the predicate.
 	// Test it by filtering a slice of integers to only keep even numbers.
+	filter := func(nums []int, predicate func(int) bool) []int {
+		var result []int
 
+		for _, v := range nums {
+			if predicate(v) {
+				result = append(result, v)
+			}
+		}
+		return result
+	}
+
+	isEven := func(x int) bool { return x%2 == 0 }
+	fmt.Println(filter([]int{1,2,3,4,5,6,7,8,9} , isEven))
+
+
+	fmt.Println("Exercises ---- 9")
 	// EXERCISE 9:
 	// Write a recursive function `power(base, exp int) int` that computes base^exp.
 	// Then write `flatten(nested [][]int) []int` that flattens a 2D slice into 1D.
 	// Test: power(2, 10) → 1024, flatten([][]int{{1,2},{3,4},{5}}) → [1 2 3 4 5]
+	var power func(base, exp int) int
+
+	power = func(base, exp int) int {
+		if exp <= 1 {
+			return base
+		}
+		return base * power(base, exp - 1)
+	}
+
+	// expected 1024
+	fmt.Println(power(2, 10))
+
+	flatten := func(nested [][]int) []int {
+		var result []int
+		for _, subSlice := range nested {
+			result = append(result, subSlice...)
+		}
+		return result
+	}
+
+	// Test flatten([][]int{{1,2},{3,4},{5}})
+	input := [][]int{{1, 2}, {3, 4}, {5}}
+	fmt.Println(flatten(input))
 
 }
