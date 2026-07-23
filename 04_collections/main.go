@@ -10,9 +10,49 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"slices" // Go 1.21+
+	"sort"
+	"strings"
+	"maps"
 )
+
+type StringSet map[string]struct{}
+
+func Add(set StringSet, key string) {
+	set[key] = struct{}{}
+}
+
+func Remove(set StringSet, key string) {
+	delete(set, key)
+}
+
+func Contains(set StringSet, key string) bool {
+	_, exists := set[key]
+	return exists
+}
+
+// Union merges two sets into a new set (A ∪ B)
+func Union(a, b StringSet) StringSet {
+	result := make(StringSet)
+
+	for k := range a {
+		result[k] = struct{}{}
+	}
+
+	for k := range b {
+		result[k] = struct{}{}
+	}
+	return result
+}
+
+func Keys(set StringSet) []string {
+	keys := make([]string, 0 , len(set))
+	for key := range set {
+		keys = append(keys, key)
+	}
+	return keys
+}
+
 
 func main() {
 	// =========================================================================
@@ -26,16 +66,16 @@ func main() {
 
 	// Declaration
 	var arr [3]int            // [0 0 0] — zero values
-	arr2 := [3]int{1, 2, 3}  // literal
+	arr2 := [3]int{1, 2, 3}   // literal
 	arr3 := [...]int{4, 5, 6} // ... lets compiler count the elements
 
 	fmt.Println(arr, arr2, arr3)  // [0 0 0] [1 2 3] [4 5 6]
-	fmt.Println(len(arr2))         // 3
-	fmt.Println(arr2[0], arr2[2])  // 1 3
+	fmt.Println(len(arr2))        // 3
+	fmt.Println(arr2[0], arr2[2]) // 1 3
 
 	// Arrays are value types — copying makes a full independent copy
 	a := [3]int{1, 2, 3}
-	b := a       // full copy
+	b := a // full copy
 	b[0] = 99
 	fmt.Println(a, b) // [1 2 3] [99 2 3] — a is unchanged
 
@@ -75,16 +115,16 @@ func main() {
 	// --- Indexing and slicing ---
 	// s[low:high] — includes low, excludes high (same as JS .slice(low, high))
 	s = []int{10, 20, 30, 40, 50}
-	fmt.Println(s[1:3])  // [20 30]  (index 1 and 2)
-	fmt.Println(s[:2])   // [10 20]  (from start to index 2)
-	fmt.Println(s[3:])   // [40 50]  (from index 3 to end)
-	fmt.Println(s[:])    // [10 20 30 40 50] (full slice)
+	fmt.Println(s[1:3]) // [20 30]  (index 1 and 2)
+	fmt.Println(s[:2])  // [10 20]  (from start to index 2)
+	fmt.Println(s[3:])  // [40 50]  (from index 3 to end)
+	fmt.Println(s[:])   // [10 20 30 40 50] (full slice)
 
 	// --- append — like JS push(), but returns a new slice header
 	// IMPORTANT: always reassign the result of append
-	s = append(s, 60)           // append one
-	s = append(s, 70, 80, 90)   // append multiple
-	fmt.Println(s)               // [10 20 30 40 50 60 70 80 90]
+	s = append(s, 60)         // append one
+	s = append(s, 70, 80, 90) // append multiple
+	fmt.Println(s)            // [10 20 30 40 50 60 70 80 90]
 
 	// Spread another slice to append all its elements (like JS spread)
 	more := []int{100, 110}
@@ -106,7 +146,7 @@ func main() {
 	// copy(dst, src) — copies min(len(dst), len(src)) elements
 	small := make([]int, 2)
 	copy(small, []int{1, 2, 3, 4}) // only copies 2 elements
-	fmt.Println(small)              // [1 2]
+	fmt.Println(small)             // [1 2]
 
 	// --- Common slice operations ---
 
@@ -121,7 +161,7 @@ func main() {
 	// Order-preserving delete (like JS splice)
 	sl2 := []int{1, 2, 3, 4, 5}
 	sl2 = append(sl2[:2], sl2[3:]...) // remove index 2
-	fmt.Println(sl2)                   // [1 2 4 5]
+	fmt.Println(sl2)                  // [1 2 4 5]
 
 	// Insert at index (like JS splice)
 	sl3 := []int{1, 2, 4, 5}
@@ -242,32 +282,115 @@ func main() {
 	// EXERCISES
 	// =========================================================================
 
+	fmt.Println("Exercise ----- 1")
 	// EXERCISE 1 (Slices):
 	// Given []int{5, 3, 8, 1, 9, 2, 7, 4, 6}
 	// a) Find the max value using a loop
 	// b) Sort it in descending order
 	// c) Print the top 3
+	sl1 := []int{5, 3, 8, 1, 9, 2, 7, 4, 6}
 
+	var slMax int // a
+	for _, v := range sl1 {
+		if v > slMax {
+			slMax = v
+		}
+	}
+	fmt.Println(slMax)
+
+	// b
+	sort.Slice(sl1, func(a, b int) bool { return sl1[a] > sl1[b] })
+	fmt.Println(sl1)
+
+	//c
+	fmt.Println(sl1[:3])
+
+	fmt.Println("Exercise ----- 2")
 	// EXERCISE 2 (Slices):
 	// Write a function removeDuplicates(s []int) []int that returns a new
 	// slice with duplicates removed (preserve order of first occurrence).
 	// Input: [1 2 3 2 1 4 5 4]
 	// Output: [1 2 3 4 5]
+	removeDuplicates := func (s []int) []int {
+		set := make(map[int]struct{})
+		result := make([]int, 0, len(s)) // pre-allocate capacity to make performant
+
+		for _, v := range s {
+			if _, exist := set[v]; !exist {
+				set[v] = struct{}{}
+				result = append(result, v)
+			} 
+		}
+
+		return result
+	}
+
+	fmt.Println(removeDuplicates([]int{1, 2, 3, 2, 1, 4, 5, 4}))
+
+	fmt.Println("Exercise ----- 3")
 
 	// EXERCISE 3 (Maps):
 	// Given a string sentence, count the frequency of each word.
 	// sentence := "the quick brown fox jumps over the lazy dog the fox"
 	// Print each word and its count, sorted alphabetically.
+	sentence := "the quick brown fox jumps over the lazy dog the fox"
+	wordSl := strings.Fields(sentence)
+	wordMap := make(map[string]int)
 
+	for _, word := range wordSl {
+		wordMap[word]++
+	}
+
+	mapKeys := slices.Collect(maps.Keys(wordMap))
+	slices.Sort(mapKeys)
+
+	for _, word := range mapKeys {
+		fmt.Printf("%s: %d\n",word, wordMap[word])
+	}
+
+	fmt.Println("Exercise ----- 4")
 	// EXERCISE 4 (Maps):
 	// Write a function `twoSum(nums []int, target int) (int, int)` that
 	// returns the indices of two numbers that add to target.
 	// Use a map for O(n) solution. (Classic LeetCode #1)
+	twoSum := func (nums []int, target int) (int, int) {
+		m := make(map[int]int)
+		for i, v := range nums {
+			if j, ok := m[target - v]; ok {
+				return j , i
+			}
+			m[v] = i
+		}
+		return -1, -1
+	}
 
+	fmt.Println(twoSum([]int {1, 4, 5, 6, 8, 3, 9}, 10))
+
+	fmt.Println("Exercise ----- 5")
 	// EXERCISE 5 (Challenge — Slices + Maps):
 	// Given []string{"apple","banana","apple","cherry","banana","apple"}
 	// Return a map of word → count, then find the most frequent word.
+	wordFrequency := func(words []string) (map[string]int, string, int) {
+		m := make(map[string]int)
+		freqWord := ""
+		freqWordCount := 0
 
+		for _, v := range words {
+			m[v]++
+			if m[v] > freqWordCount {
+				freqWord = v
+				freqWordCount = m[v]
+			}
+		}
+		return m, freqWord, freqWordCount
+	}
+
+
+	wMap, word, count := wordFrequency([]string{"apple","banana","apple","cherry","banana","apple"})
+	fmt.Println(wMap, word, count)
+
+
+	fmt.Println("Exercise ----- 6")
 	// EXERCISE 6 (Slice internals):
 	// Demonstrate the shared backing array gotcha:
 	//   a := []int{1, 2, 3, 4, 5}
@@ -275,7 +398,19 @@ func main() {
 	//   b[0] = 99
 	// Print a and b after the modification. Does a change?
 	// Then fix it by using copy() to make b independent, and repeat.
+	 arr1 := []int{1, 2, 3, 4, 5}
+	 ar2 := arr1[1:3]   // b shares memory with a
+	 ar2[0] = 99
+	 fmt.Println(arr1, ar2)
 
+	 ar1 := []int{1, 2, 3, 4, 5}
+	 copied := make([]int, 2, len(ar1))
+	 copy(copied, ar1)
+	 copied[0] = 55
+	 fmt.Println(ar1, copied)
+
+
+	fmt.Println("Exercise ----- 7")
 	// EXERCISE 7 (Set pattern):
 	// Implement a string set using map[string]struct{}.
 	// Functions: Add(set, val), Remove(set, val), Contains(set, val) bool, Union(a, b) set
@@ -284,11 +419,50 @@ func main() {
 	//   s2 := "the dog sat on the log"
 	// Print the union of both word sets.
 
+	str1 := "the cat sat on the mat"
+	str2 := "the dog sat on the log"
+
+	set1 := make(StringSet)
+	set2 := make(StringSet)
+
+	for _, word := range strings.Fields(str1) {
+		Add(set1, word)
+	}
+
+	fmt.Println("Set1 Keys", Keys(set1))
+	
+	for _, word := range strings.Fields(str2) {
+		Add(set2, word)
+	}
+	
+	fmt.Println("Set2 Keys", Keys(set2))
+
+	unionSet := Union(set1, set2)
+	fmt.Println("Union keys", Keys(unionSet))
+
+	fmt.Println("Exercise ----- 8")
+
 	// EXERCISE 8 (make + capacity):
 	// Write a function buildSlice(n int) []int that uses make([]int, 0, n) to
 	// pre-allocate capacity, then appends n*n, (n-1)*(n-1), ..., 1*1 to it.
 	// Print the resulting slice, its length, and its capacity.
 	// Explain in a comment why pre-allocating capacity is faster for large n.
+
+	buildSlice := func(n int) []int {
+		// Pre-allocating capacity guarantees the underlying backing array 
+		// is large enough upfront.
+		sl := make([]int, 0, n)
+		for ; n >= 1; n-- {
+			sl = append(sl, n*n)
+		}
+		return sl
+	}
+	result := buildSlice(10)
+
+	// Print slice contents, length, and capacity
+	fmt.Println("Slice:", result)
+	fmt.Printf("Length: %d, Capacity: %d\n", len(result), cap(result))
+
 
 	_ = matrix // suppress unused warning
 	_ = b
