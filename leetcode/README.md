@@ -25,6 +25,10 @@ Here's how to fill those gaps and avoid the traps.
 - [Rune ↔ Int Conversions](#rune--int-conversions)
 - [Heap / Priority Queue](#heap--priority-queue)
 - [Bit Manipulation — A Few Tricks Worth Knowing](#bit-manipulation--a-few-tricks-worth-knowing)
+- [strings Package — Common Ops](#strings-package--common-ops)
+- [math Package — Float Sentinel, Sqrt, Pow](#math-package--float-sentinel-sqrt-pow)
+- [container/list — Doubly Linked List (LRU)](#containerlist--doubly-linked-list-lru)
+- [sort.Search — Binary Search on Answer](#sortsearch--binary-search-on-answer)
 
 ---
 
@@ -822,3 +826,205 @@ n ^= 1 << i
 ```
 
 **Gotcha: shift amount must be non-negative and < bit width.** Shifting a 64-bit int by 64 or more is undefined behavior in some languages; in Go it's well-defined (result is 0) but you should still guard against it if the shift amount comes from user input.
+
+---
+
+## strings Package — Common Ops
+
+The `String` section above covers immutability and `strings.Builder`. These are the ops that actually appear in problems:
+
+```go
+import "strings"
+
+// Split — exact delimiter
+strings.Split("a,b,,c", ",")      // ["a" "b" "" "c"]  — empty strings included
+strings.SplitN("a,b,c", ",", 2)   // ["a" "b,c"]  — at most 2 parts
+
+// Fields — split on ANY whitespace, skips empty tokens
+strings.Fields("  foo  bar  baz  ")  // ["foo" "bar" "baz"]
+// Use Fields when input has irregular spacing; use Split when delimiter is exact.
+
+strings.Join([]string{"a", "b", "c"}, "-")  // "a-b-c"
+strings.Repeat("ab", 3)                      // "ababab"
+
+strings.Contains("seafood", "foo")     // true
+strings.HasPrefix("seafood", "sea")    // true
+strings.HasSuffix("seafood", "food")   // true
+strings.Index("seafood", "foo")        // 3  (-1 if not found)
+strings.Count("cheese", "e")           // 3  (non-overlapping)
+
+strings.ToLower("HELLO")               // "hello"
+strings.ToUpper("hello")               // "HELLO"
+strings.TrimSpace("  hello  ")         // "hello"
+strings.Trim("##hello##", "#")         // "hello"  — trims ANY char in cutset
+strings.TrimLeft("##hello##", "#")     // "hello##"
+strings.TrimRight("##hello##", "#")    // "##hello"
+
+strings.Replace("oink oink oink", "oink", "moo", 2)   // "moo moo oink"  — n=-1 for all
+strings.ReplaceAll("oink oink", "oink", "moo")         // "moo moo"
+```
+
+**Gotcha: `strings.Split` on an empty string returns `[""]` (a slice with one empty element), not `[]`.** Check `len(s) == 0` before splitting if you need an empty slice for an empty input.
+
+```go
+strings.Split("", ",")   // [""]  — length 1, not 0
+```
+
+**Gotcha: `strings.Fields("")` returns `[]` (empty slice), not `[""]`.** Fields is safer when you just want tokens.
+
+---
+
+## math Package — Float Sentinel, Sqrt, Pow
+
+```go
+import "math"
+
+// Infinity — use as initial "best distance" in Dijkstra or similar
+math.Inf(1)   // +Inf
+math.Inf(-1)  // -Inf
+math.IsInf(x, 1)   // true if x == +Inf
+math.IsInf(x, -1)  // true if x == -Inf
+math.IsNaN(x)
+
+// Common ops (all operate on float64)
+math.Abs(-3.5)       // 3.5
+math.Sqrt(16.0)      // 4.0
+math.Pow(2, 10)      // 1024.0
+math.Log(math.E)     // 1.0
+math.Log2(8)         // 3.0
+math.Floor(3.7)      // 3.0
+math.Ceil(3.2)       // 4.0
+math.Round(3.5)      // 4.0
+
+// Integer sqrt (safe, avoids float precision issues)
+isqrt := int(math.Sqrt(float64(n)))
+// verify: isqrt*isqrt <= n — float rounding can push it one off
+for isqrt*isqrt > n { isqrt-- }
+for (isqrt+1)*(isqrt+1) <= n { isqrt++ }
+```
+
+**When to use `math.Inf` over `math.MaxInt`:**
+
+```go
+// For Dijkstra with float64 weights — use Inf, not MaxInt
+dist := make([]float64, n)
+for i := range dist { dist[i] = math.Inf(1) }
+dist[src] = 0
+
+// For integer Dijkstra — use math.MaxInt/2 (safe to add without overflow)
+dist := make([]int, n)
+for i := range dist { dist[i] = math.MaxInt / 2 }
+```
+
+---
+
+## container/list — Doubly Linked List (LRU)
+
+`container/list` gives you a doubly linked list with O(1) insert and O(1) remove at any position — you can't do that with a slice. The main use case on LeetCode is **LRU cache**.
+
+```go
+import "container/list"
+
+l := list.New()
+
+// Push
+back  := l.PushBack(42)   // returns *list.Element
+front := l.PushFront(1)
+
+// Access value
+back.Value.(int)   // type-assert — Value is `any`
+
+// Remove — O(1), any position
+l.Remove(back)
+
+// Move to front (LRU hit)
+l.MoveToFront(front)
+
+// Iterate front to back
+for e := l.Front(); e != nil; e = e.Next() {
+    fmt.Println(e.Value)
+}
+
+l.Len()    // length
+l.Front()  // *list.Element or nil
+l.Back()   // *list.Element or nil
+```
+
+**LRU Cache skeleton:**
+
+```go
+type LRUCache struct {
+    cap   int
+    list  *list.List
+    index map[int]*list.Element  // key → element in list
+}
+
+type entry struct{ key, val int }
+
+func Constructor(capacity int) LRUCache {
+    return LRUCache{capacity, list.New(), map[int]*list.Element{}}
+}
+
+func (c *LRUCache) Get(key int) int {
+    if el, ok := c.index[key]; ok {
+        c.list.MoveToFront(el)
+        return el.Value.(*entry).val
+    }
+    return -1
+}
+
+func (c *LRUCache) Put(key, val int) {
+    if el, ok := c.index[key]; ok {
+        el.Value.(*entry).val = val
+        c.list.MoveToFront(el)
+        return
+    }
+    if c.list.Len() == c.cap {
+        evict := c.list.Back()
+        c.list.Remove(evict)
+        delete(c.index, evict.Value.(*entry).key)
+    }
+    c.index[key] = c.list.PushFront(&entry{key, val})
+}
+```
+
+**Gotcha: `Element.Value` is `any`.** Always type-assert when you read it: `e.Value.(*entry)`. A struct pointer (`*entry`) is better than a value (`entry`) because the list stores a copy and you won't be able to mutate it otherwise.
+
+---
+
+## sort.Search — Binary Search on Answer
+
+`sort.Search(n, f)` returns the smallest index `i` in `[0, n)` for which `f(i)` is true, assuming `f` is false then true (monotone). It's the stdlib version of the "binary search on answer" template — no manual `lo/hi` needed.
+
+```go
+import "sort"
+
+// Find first index where nums[i] >= target (lower bound)
+i := sort.Search(len(nums), func(i int) bool { return nums[i] >= target })
+
+// Find first index where nums[i] > target (upper bound)
+i := sort.Search(len(nums), func(i int) bool { return nums[i] > target })
+
+// Convenience wrappers for sorted []int
+sort.SearchInts(nums, target)    // first i where nums[i] >= target
+sort.SearchStrings(strs, s)      // first i where strs[i] >= s
+```
+
+**Binary search on answer** — when you're not searching a slice but asking "what is the minimum X that satisfies some condition?":
+
+```go
+// "minimum speed such that all packets arrive in time"
+ans := sort.Search(maxSpeed, func(speed int) bool {
+    return canFinish(speed)  // your condition here
+})
+// ans == maxSpeed means no valid solution found — check if needed
+```
+
+**Gotcha: `sort.Search` returns `n` (not `-1`) when no element satisfies `f`.** Always bounds-check the result:
+
+```go
+i := sort.SearchInts(nums, target)
+if i < len(nums) && nums[i] == target {
+    // found
+}
+```
