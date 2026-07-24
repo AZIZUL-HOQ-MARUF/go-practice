@@ -258,6 +258,51 @@ for _, ch := range chars {
 result := sb.String()
 ```
 
+### Modifying a string — there is no true in-place
+
+Strings are immutable at the language level. The only way to "modify" one is to convert to a mutable slice, edit it, and convert back. Every `string(b)` at the end allocates a new string — you are never modifying the original memory.
+
+**ASCII problems — use `[]byte`:**
+
+```go
+b := []byte(s)   // copy into a mutable byte slice
+b[0] = 'H'
+b[1], b[2] = b[2], b[1]  // swap bytes
+s = string(b)    // new string from modified bytes
+```
+
+**Unicode problems — use `[]rune`:**
+
+```go
+r := []rune(s)   // copy into a mutable rune (int32) slice — one entry per character
+r[0] = 'H'
+s = string(r)    // convert back
+```
+
+**When to use which:**
+
+| | `[]byte` | `[]rune` |
+|---|---|---|
+| Element size | 1 byte | 4 bytes (int32) |
+| Index means | byte position | character position |
+| Safe for ASCII | yes | yes |
+| Safe for Unicode (e.g., `é`, `中`) | only if you don't split multi-byte chars | yes |
+| LeetCode default | most problems | problems that mention Unicode / rune |
+
+**LeetCode shortcut — many "modify string in-place" problems give you `[]byte` directly:**
+
+```go
+// LeetCode signature: func reverseString(s []byte)
+// No conversion needed — just work with the slice
+func reverseString(s []byte) {
+    for l, r := 0, len(s)-1; l < r; l, r = l+1, r-1 {
+        s[l], s[r] = s[r], s[l]  // true in-place, no allocation
+    }
+}
+```
+
+When the problem says "in-place with O(1) extra space" and the input is a string, check the signature — Go LeetCode usually hands you `[]byte`, which genuinely is mutable.
+
 ---
 
 ## Integer
